@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "642134750123",
+    "firebase_url": "https://faceanalysis-fbb7f.firebaseio.com",
+    "project_id": "faceanalysis-fbb7f",
+    "storage_bucket": "faceanalysis-fbb7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642134750123:android:e32d2ad95b703add10d8ee",
+        "android_client_info": {
+          "package_name": "com.example.faceanalysis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642134750123-le6k2c39pvarqbmrrq9habrp3qncl5v6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faceanalysis",
+            "certificate_hash": "75fc7d4ce115639b229b9d01ede7f1c62ce2f288"
+          }
+        },
+        {
+          "client_id": "642134750123-3d06loldcbiti3hjrifsqtlif2met0qj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbrUTeOPwNaWoHaA7sRfc8XZvWXOuzQqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "642134750123-3d06loldcbiti3hjrifsqtlif2met0qj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
