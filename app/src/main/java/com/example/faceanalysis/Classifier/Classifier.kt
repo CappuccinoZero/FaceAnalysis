@@ -31,7 +31,11 @@ abstract class Classifier(activity:Activity,device:Device,numThreads:Int) {
     companion object{
         private val DIM_BATCH_SIZE = 1
         private val DIM_PIXEL_SIZE = 3
-        class Recognition{
+        class Recognition:Comparable<Recognition>{
+            override fun compareTo(other: Recognition): Int {
+                return this.confidence.compareTo(other.confidence)
+            }
+
             var id = 0
             var title = ""
             var confidence = 0f
@@ -98,19 +102,18 @@ abstract class Classifier(activity:Activity,device:Device,numThreads:Int) {
             list.add(line)
         }
         return list
-        //return Util.loadModelList(activity,getLabelPath())
     }
 
     private fun init(activity:Activity,device:Device,numThreads:Int){
         tfliteModel = loadModelFile(activity)
+        tfliteOptions = Interpreter.Options()
         when(device){
-            //Device.NNAPI->tfliteOptions.setUseNNAPI(true)
+            Device.NNAPI->tfliteOptions?.setUseNNAPI(true)
             Device.GPU->{
-                //gpuDelegate = GpuDelegate()
-                //tfliteOptions.addDelegate(gpuDelegate)
+                gpuDelegate = GpuDelegate()
+                tfliteOptions?.addDelegate(gpuDelegate)
             }
         }
-        tfliteOptions = Interpreter.Options()
         tfliteOptions!!.setNumThreads(numThreads)
         tflite = Interpreter(tfliteModel,tfliteOptions)
         labels = loadModelList(activity)
@@ -123,8 +126,7 @@ abstract class Classifier(activity:Activity,device:Device,numThreads:Int) {
     private fun convertBitmapToByteBuffer(bitmap:Bitmap){
         if (imgData==null) return
         imgData?.rewind()
-        Log.d("测试",pixelCache.size.toString())
-        val bm = Bitmap.createScaledBitmap(bitmap, 224, 224, false)
+        val bm = Bitmap.createScaledBitmap(bitmap, getImageSizeX(), getImageSizeY(), false)
         bm.getPixels(pixelCache,0,bm.width,0,0,bm.width,bm.height)
         var pixel = 0
         for(i in 0 until getImageSizeX()){
@@ -141,7 +143,7 @@ abstract class Classifier(activity:Activity,device:Device,numThreads:Int) {
         for(i in 0 until labels.size)
             arrays.add(Recognition().also {
                 it.id = i
-                it.title = labels[i] ?:""
+                it.title = labels[i]
                 it.confidence = getNormalizedProbability(i)
             })
         return arrays

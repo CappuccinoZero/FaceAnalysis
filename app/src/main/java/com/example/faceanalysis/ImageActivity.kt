@@ -23,7 +23,10 @@ import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetectorOptions
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureMimeType
 import kotlinx.android.synthetic.main.activity_image.*
+import org.jetbrains.annotations.Contract
 import java.io.File
+import java.util.*
+import kotlin.Comparator
 
 class ImageActivity : AppCompatActivity() {
     private lateinit var detector:FirebaseVisionObjectDetector
@@ -66,10 +69,10 @@ class ImageActivity : AppCompatActivity() {
             val labeler = FirebaseVision.getInstance().getOnDeviceAutoMLImageLabeler(labelerOption)
             labeler.processImage(image)
                 .addOnSuccessListener {
-                for(label in it){
-                    textContent.text = if(label.text=="Anime") "动漫" else "手办" + "  概率"+label.confidence
+                    for(label in it){
+                        textContent.text = if(label.text=="Anime") "动漫" else "手办" + "  概率"+label.confidence
+                    }
                 }
-            }
                 .addOnFailureListener{
                     Log.d("失败：",it.message)
                 }
@@ -105,16 +108,10 @@ class ImageActivity : AppCompatActivity() {
                 }
         }else if(requestCode == 1003){
             val arr = classifier.recognizeImage(getScaleBitmap(path,this))
-            var max = arr[0].confidence
-            var index = 0
-            for(a in arr){
-                if(a.confidence>max){
-                    max = a.confidence
-                    index = a.id
-                }
+            val arr2 = arr.sorted()
+            for(a in arr2){
+                Log.d("测试",a.id.toString()+"  "+a.title+"  "+a.confidence)
             }
-            val a:Int = (arr[index].confidence*100).toInt()
-            Log.d("测试",arr[index].title+"  "+arr[index].confidence)
         }
     }
 
